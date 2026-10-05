@@ -6,6 +6,7 @@ module alu_tb;
     logic [7:0] result;
     logic zero;
 
+    //Device Under Test (connect to a port)
     alu dut (
         .a(a),
         .b(b),

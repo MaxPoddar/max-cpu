@@ -32,9 +32,7 @@ module register_file_tb;
         write_addr = 2'b00;
         write_data = 8'd0;
 
-        // -------------------------
         // Write 5 into R1
-        // -------------------------
         write_enable = 1;
         write_addr = 2'b01;
         write_data = 8'd5;
@@ -48,9 +46,7 @@ module register_file_tb;
         $display("R1 = %0d", read_data_a);
 
 
-        // -------------------------
         // Write 42 into R2
-        // -------------------------
         write_addr = 2'b10;
         write_data = 8'd42;
 
@@ -62,10 +58,7 @@ module register_file_tb;
 
         $display("R2 = %0d", read_data_a);
 
-
-        // -------------------------
         // Read R1 and R2 together
-        // -------------------------
         read_addr_a = 2'b01;
         read_addr_b = 2'b10;
 
@@ -78,9 +71,7 @@ module register_file_tb;
         );
 
 
-        // -------------------------
         // Check write_enable = 0
-        // -------------------------
         write_enable = 0;
         write_addr = 2'b01;
         write_data = 8'd99;
