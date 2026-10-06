@@ -2,9 +2,9 @@ module register_file_tb;
 
     logic clk;
     logic write_enable;
-    logic [1:0] read_addr_a;
-    logic [1:0] read_addr_b;
-    logic [1:0] write_addr;
+    logic [2:0] read_addr_a;
+    logic [2:0] read_addr_b;
+    logic [2:0] write_addr;
     logic [7:0] write_data;
     logic [7:0] read_data_a;
     logic [7:0] read_data_b; 
@@ -27,34 +27,34 @@ module register_file_tb;
         // Initial values
         clk = 0;
         write_enable = 0;
-        read_addr_a = 2'b00;
-        read_addr_b = 2'b00;
-        write_addr = 2'b00;
+        read_addr_a = 3'b000;
+        read_addr_b = 3'b000;
+        write_addr = 3'b000;
         write_data = 8'd0;
 
         // Write 5 into R1
         write_enable = 1;
-        write_addr = 2'b01;
+        write_addr = 3'b001;
         write_data = 8'd5;
 
         @(posedge clk);
 
         // Read R1
-        read_addr_a = 2'b01;
+        read_addr_a = 3'b001;
         #1;
         if (read_data_a !== 8'd5)
             $error("Read and Write R1: FAIL -- expected 5, got %0d", read_data_a);
         else
-            $display("Read and Write: PASS");
+            $display("Read and Write R1: PASS");
 
         // Write 42 into R2
-        write_addr = 2'b10;
+        write_addr = 3'b010;
         write_data = 8'd42;
 
         @(posedge clk);
 
         // Read R2
-        read_addr_a = 2'b10;
+        read_addr_a = 3'b010;
         #1;
         if (read_data_a !== 8'd42)
             $error("Read and Write R2: FAIL -- expected 42, got %0d", read_data_a);
@@ -62,8 +62,8 @@ module register_file_tb;
             $display("Read and Write R2: PASS");
 
         // Read R1 and R2 together
-        read_addr_a = 2'b01;
-        read_addr_b = 2'b10;
+        read_addr_a = 3'b001;
+        read_addr_b = 3'b010;
 
         #1;
         if (read_data_a !== 8'd5 || read_data_b !== 8'd42)
@@ -71,14 +71,28 @@ module register_file_tb;
         else
             $display("Dual Read: PASS");
 
+        // Write and Read R7
+        write_addr = 3'b111;
+        write_data = 8'd47;
+        
+        @(posedge clk);
+
+        read_addr_a = 3'b111;
+        #1;
+        if (read_data_a !== 8'd47)
+            $error("Read and Write R7: FAIL -- expected 47, got %0d", read_data_a);
+        else
+            $display("Read and Write R7: PASS");
+
+
         // Check write_enable = 0
         write_enable = 0;
-        write_addr = 2'b01;
+        write_addr = 3'b001;
         write_data = 8'd99;
 
         @(posedge clk);
 
-        read_addr_a = 2'b01;
+        read_addr_a = 3'b001;
         #1;
 
         if (read_data_a !== 8'd5)

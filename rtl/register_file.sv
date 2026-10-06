@@ -1,16 +1,16 @@
 module register_file (
     input logic clk,
     input logic write_enable,
-    input logic [1:0] read_addr_a,
-    input logic [1:0] read_addr_b,
-    input logic [1:0] write_addr,
+    input logic [2:0] read_addr_a,
+    input logic [2:0] read_addr_b,
+    input logic [2:0] write_addr,
     input logic [7:0] write_data,
 
     output logic [7:0] read_data_a,
     output logic [7:0] read_data_b
 
 );
-    logic [7:0] registers [0:3];
+    logic [7:0] registers [0:7];
 
     always_ff @( posedge clk ) begin
         if (write_enable) begin
