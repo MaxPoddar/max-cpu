@@ -37,54 +37,55 @@ module register_file_tb;
         write_addr = 2'b01;
         write_data = 8'd5;
 
-        #10;
+        @(posedge clk);
 
         // Read R1
         read_addr_a = 2'b01;
         #1;
-
-        $display("R1 = %0d", read_data_a);
-
+        if (read_data_a !== 8'd5)
+            $error("Read and Write R1: FAIL -- expected 5, got %0d", read_data_a);
+        else
+            $display("Read and Write: PASS");
 
         // Write 42 into R2
         write_addr = 2'b10;
         write_data = 8'd42;
 
-        #10;
+        @(posedge clk);
 
         // Read R2
         read_addr_a = 2'b10;
         #1;
-
-        $display("R2 = %0d", read_data_a);
+        if (read_data_a !== 8'd42)
+            $error("Read and Write R2: FAIL -- expected 42, got %0d", read_data_a);
+        else
+            $display("Read and Write R2: PASS");
 
         // Read R1 and R2 together
         read_addr_a = 2'b01;
         read_addr_b = 2'b10;
 
         #1;
-
-        $display(
-            "R1 = %0d, R2 = %0d",
-            read_data_a,
-            read_data_b
-        );
-
+        if (read_data_a !== 8'd5 || read_data_b !== 8'd42)
+            $error("Dual Read: FAIL -- expected R1 = 5 and R2 = 42, got R1 = %0d and R2 = %0d", read_data_a, read_data_b);
+        else
+            $display("Dual Read: PASS");
 
         // Check write_enable = 0
         write_enable = 0;
         write_addr = 2'b01;
         write_data = 8'd99;
 
-        #10;
+        @(posedge clk);
 
         read_addr_a = 2'b01;
         #1;
 
-        $display(
-            "R1 after disabled write = %0d",
-            read_data_a
-        );
+        if (read_data_a !== 8'd5)
+            $error("Disabled write enable: FAIL -- expected 5, got %0d", read_data_a);
+        else
+            $display("Disabled write enable: PASS");
+
 
         $finish;
     end

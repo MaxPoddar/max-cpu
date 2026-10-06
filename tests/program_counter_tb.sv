@@ -18,7 +18,7 @@ module program_counter_tb;
 
     initial begin
 
-        // Initial vals
+        // Initial values
         clk = 0;
         reset = 0;
         load = 0;
@@ -28,33 +28,48 @@ module program_counter_tb;
         reset = 1;
         @(posedge clk);
         #1;
-        $display("Reset PC: %0d", pc);
+        if (pc !== 8'd0)
+            $error("Reset: FAIL -- expected 0, got %0d", pc);
+        else
+            $display("Reset: PASS");
 
         // Normal increment
         reset = 0;
         @(posedge clk);
         #1;
-        $display("Increment PC by 1: %0d", pc);
+        if (pc !== 8'd1)
+            $error("Increment: FAIL -- expected 1, got %0d", pc);
+        else
+            $display("Increment: PASS");
 
         // Load
         load = 1;
         next_pc = 8'd43;
         @(posedge clk);
         #1;
-        $display("Load: %0d", pc);
+        if (pc !== 8'd43)
+            $error("Load: FAIL -- expected 43, got %0d", pc);
+        else
+            $display("Load: PASS");
 
         // Normal increment after load
         load = 0;
         @(posedge clk);
         #1;
-        $display("Load incremented: %0d", pc);
+        if (pc !== 8'd44)
+            $error("Increment after load: FAIL -- expected 44, got %0d", pc);
+        else
+            $display("Increment after load: PASS");
 
         // Check reset overwrites load = 1
         reset = 1;
         load = 1;
         @(posedge clk);
         #1;
-        $display("Reset vs Load: %0d", pc);
+        if (pc !== 8'd0)
+            $error("Reset vs Load: FAIL -- expected 0, got %0d", pc);
+        else
+            $display("Reset vs Load: PASS");
 
         $finish;
     end

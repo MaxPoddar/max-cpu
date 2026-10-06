@@ -16,34 +16,76 @@ module alu_tb;
     );
 
     initial begin
+
+        // Initial values
         a = 8'd10;
-        b = 8'd3;
+        b = 8'd6;
 
+        // ADD
         op = 3'b000;
-        #10;
-        $display("ADD: %0d + %0d = %0d", a, b, result);
+        #1;
+        if (result !== 8'd16)
+            $error("ADD: FAIL -- expected 16, got %0d", result);
+        else
+            $display("ADD: PASS");
 
+        // SUB
         op = 3'b001;
-        #10;
-        $display("SUB: %0d - %0d = %0d", a, b, result);
+        #1;
+        if (result !== 8'd4)
+            $error("SUB: FAIL -- expected 4, got %0d", result);
+        else
+            $display("SUB: PASS");
 
+        // AND
         op = 3'b010;
-        #10;
-        $display("AND: result = %b", result);
+        #1;
+        if (result !== 8'b00000010)
+            $error("AND: FAIL -- expected 00000010, got %b", result);
+        else
+            $display("AND: PASS");
 
+        // OR
         op = 3'b011;
-        #10;
-        $display("OR: result = %b", result);
+        #1;
+        if (result !== 8'b00001110)
+            $error("OR: FAIL -- expected 00001110, got %b", result);
+        else
+            $display("OR: PASS");
 
+        // XOR
         op = 3'b100;
-        #10;
-        $display("XOR: result = %b", result);
+        #1;
+        if (result !== 8'b00001100)
+            $error("XOR: FAIL -- expected 00001100, got %b", result);
+        else
+            $display("XOR: PASS");
 
-        a = 3'd5;
-        b = 3'd5;
+        // Test if result = 0 -> zero flag = 1
+        a = 8'd5;
+        b = 8'd5;
         op = 3'b001;
-        #10
-        $display("ZERO TEST: result=%0d zero=%b", result, zero);
+        #1;
+        if (zero !== 1'b1)
+            $error("Zero: FAIL -- expected 1, got %b", zero);
+        else
+            $display("Zero: PASS");
+        
+        // Test if result != 0 -> zero flag = 0
+        op = 3'b000;
+        #1;
+        if (zero !== 1'b0)
+            $error("Non zero: FAIL -- expected 0, got %b", zero);
+        else
+            $display("Non zero: PASS");
+
+        // Invalid op code
+        op = 3'b111;
+        #1;
+        if (result !== 8'd0)
+            $error("Invalid op: FAIL -- expected 0, got %0d", result);
+        else
+            $display("Invalid op: PASS");
 
         $finish;
     end
